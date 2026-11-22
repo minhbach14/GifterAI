@@ -81,6 +81,7 @@ Khi tạo trang mới (như Đăng nhập, Đăng ký, Hồ sơ, Lịch sử qu�
 > **QUY TẮC:**
 > * Tuyệt đối **KHÔNG** tải code trực tiếp bằng nút *Upload files* trên trình duyệt web GitHub.
 > * Tuyệt đối **KHÔNG** code và push trực tiếp lên nhánh **`main`**. Mỗi tính năng hoặc trang giao diện mới phải được làm trên một **nhánh riêng (Branch)**.
+> * **NHỚ** cài git trên máy tính để sử dụng các chức năng kéo và đẩy code lên github.
 
 ### Bước 1: Clone dự án về máy
 (Tải bản clone của dự án về và chỉnh sửa)
