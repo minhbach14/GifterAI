@@ -1,0 +1,312 @@
+ <!DOCTYPE html>
+ <html lang="vi">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIFTER | Free AI Gift Finder</title>
+    <link rel="icon" href="assets/images/icon.svg">
+
+    <!-- CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+
+    <!-- JS -->
+    <script src="./js/icon.js" defer></script>
+    <script src="./js/config.js" defer></script>
+    <script src="./js/sample-data.js" defer></script>
+    <script src="./js/utils.js" defer></script>
+    <script src="./js/header.js" defer></script>
+    <script src="./js/gift-service.js" defer></script>
+    <script src="./js/app.js" defer></script>
+ </head>
+ <body>
+    <!-- ====== HEADER ====== -->
+    <div id="header-container"></div>
+    
+    <!-- ====== NỘI DUNG CHÍNH ====== -->
+    <main id="main-content">
+        <section class="finder" id="find-a-gift">
+            <div class="hero-background"></div>
+            <div class="hero-intro" id="hero-intro">
+                <span class="eyebrow">HÃY ĐỂ GIFTER GIÚP BẠN</span>
+                <h1 id="hero-title">Một chút nghĩ suy<br><em>Một món quà đúng ý</em></h1>
+            </div>
+
+            <!-- Khung AI trả lời -->
+            <div id="conversation-shell" class="conversation-shell view-transition" hidden>
+                <div class="conversation-heading">
+                    <button type="button" id="new-search" class="text-button">
+                        <span data-icon="arrow-left"></span> Bắt đầu lại
+                    </button>
+                    <span class="mode-label">
+                        <i></i>Khung trả lời mẫu
+                    </span>
+                </div>
+                <div id="conversation" class="conversation"></div>
+            </div>
+
+            <!-- Khung gửi yêu cầu -->
+            <div class="composer-wrap">
+                <form id="gift-form" class="composer">
+                    <div class="composer-top">
+                        <div class="input-tabs" role="tablist">
+                            <button id="tab-describe" type="button" class="input-tab active">
+                                <span data-icon="pen"></span><b>Describe</b>
+                                <span class="tab-caption">- Diễn tả</span>
+                            </button>
+                            <button id="tab-guide" type="button" class="input-tab">
+                                <span data-icon="sliders"></span><b>Guide</b>
+                                <span class="tab-caption">- Gợi mở</span>
+                            </button>
+                        </div>
+                        <span class="composer-signature"></span>
+                    </div>
+
+                    <!-- Composer describe -->
+                    <div id="panel-describe">
+                        <label class="sr-only" id="gift-form">Mô tả người bạn muốn tặng quà</label>
+                        <textarea 
+                            id="gift-prompt" 
+                            name="prompt" 
+                            rows="3" 
+                            maxlength="1500"
+                            placeholder="Mình muốn tặng quà sinh nhật cho mẹ, 43 tuổi. Ngân sách khoảng 500k…"
+                        ></textarea>
+                    </div>
+
+                    <!-- Composer guide -->
+                    <div id="panel-guide" class="guide-paned" hidden>
+                        <div class="guide-fields">
+                            <!-- Field: Người nhận -->
+                            <div class="field">
+                                <label for="recipient"><span>*</span>Bạn tặng cho ai?</label>
+                                <select name="recipient" id="recipient">
+                                    <option value="">Chọn người nhận</option>
+                                    <option value="mom">Mẹ</option>
+                                    <option value="dad">Bố</option>
+                                    <option value="partner">Người yêu</option>
+                                    <option value="friend">Bạn bè</option>
+                                </select>
+                            </div>
+                            <!-- Field: Độ tuổi -->
+                            <div class="field">
+                                <label for="age">Độ tuổi</label>
+                                <select id="age" name="age">
+                                    <option value="">Không giới hạn</option>
+                                    <option value="under18">Dưới 18 tuổi</option>
+                                    <option value="18-25">18-25 tuổi</option>
+                                    <option value="26-35">26-35 tuổi</option>
+                                    <option value="36-50">36-50 tuổi</option>
+                                    <option value="51+">Trên 50 tuổi</option>
+                                </select>
+                            </div>
+                            <!-- Field: Lý do -->
+                            <div class="field">
+                                <label for="occasion">Nhân dịp gì?</label>
+                                <select id="occasion" name="occasion">
+                                    <option value="just-because">Chỉ vì muốn tặng</option>
+                                    <option value="birthday">Sinh nhật</option>
+                                    <option value="anniversary">Kỷ niệm</option>
+                                    <option value="thanks">Lời cảm ơn</option>
+                                    <option value="graduation">Tốt nghiệp</option>
+                                    <option value="holiday">Lễ / Tết</option>
+                                </select>
+                            </div>
+                            <!-- Field: Budget -->
+                            <div class="field">
+                                <label for="budget">Ngân sách</label>
+                                <select id="budget" name="budget">
+                                    <option value="any">Linh hoạt</option>
+                                    <option value="under300">Dưới 300.000 đ</option>
+                                    <option value="300-500">300.000-500.000 đ</option>
+                                    <option value="500-1000">500.000-1.000.000 đ</option>
+                                    <option value="over1000">Trên 1.000.000 đ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field more-field">
+                            <label for="more-about">Kể thêm một chút về họ</label>
+                            <textarea 
+                                name="details" 
+                                id="more-about" 
+                                rows="5" 
+                                maxlength="1000"
+                                placeholder="Sở thích, tính cách, điều họ luôn nhắc đến…"
+                            ></textarea>
+                        </div>
+                    </div>
+                    <!-- Submit button section -->
+                    <p id="form-error" class="inline-error" hidden></p>
+                    <div class="composer-bottom">
+                        <span id="prompt-help"><span data-icon="heart"></span>Quà đúng ý bắt đầu từ sự quan tâm</span>
+                        <button type="submit" id="find-gifts" class="button button-primary">
+                            <span data-icon="sparkles"></span><span class="button-label">Tìm ý tưởng</span><span data-icon="arrow-right"></span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Sample choice -->
+                <div id="example-prompts" class="example-prompts">
+                    <button type="button" data-example="mom">Quà cho mẹ</button>
+                    <button type="button" data-example="partner">Quà cho người yêu</button>
+                    <button type="button" data-example="friend">Quà cho bạn bè</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Kết quả tìm gợi ý -->
+        <section id="results-section" class="results-section view-transition" hidden>
+            <div class="results-layout">
+                <aside class="refine-sidebar">
+                    <div class="refine-heading">
+                        <span class="round-icon" data-icon="sliders"></span>
+                        <div>
+                            <span class="eyebrow small">THÊM MỘT CHÚT THẤU HIỂU</span>
+                            <h2>Câu hỏi tinh chỉnh</h2>
+                        </div>
+                    </div>
+                    <p>Vài lựa chọn nhỏ để món quà phù hợp hơn</p>
+                    <form id="refine-form">
+                        <div id="refine-questions"></div>
+                        <button class="button button-primary refine-submit" id="refine-button" type="submit">
+                            <span data-icon="sparkles"></span> Lọc Gợi ý 
+                            <span data-icon="arrow-right"></span>
+                        </button>
+                        <button id="reset-refine" class="text-button reset-refine" type="button">Đặt lại lựa chọn</button>
+                    </form>
+                    <div class="refine-tip">
+                        <span data-icon="heart"></span>
+                        <p>
+                            Không cần hoàn hảo <br>Chỉ cần một chút quan tâm
+                        </p>
+                    </div>
+                </aside>
+                <div class="results-main">
+                    <div class="results-heading">
+                        <div>
+                            <span class="eyebrow small">GIFTER GỢI Ý GỬI NGƯỜI BẠN THƯƠNG</span>
+                            <h2 id="results-title">Những món quà dành riêng cho họ</h2>
+                            <p id="results-subtitle"></p>
+                        </div>
+                        <div class="sort-field">
+                            <label class="sr-only" for="sort-products">Sắp xếp gợi ý</label>
+                            <select id="sort-products">
+                                <option value="relevance">Phù hợp nhất</option>
+                                <option value="price-asc">Giá thấp đến cao</option>
+                                <option value="price-desc">Giá cao đến thấp</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="results-meta">
+                        <span id="result-count"></span>
+                    </div>
+                    <p id="refine-error" class="inline-error"></p>
+                    <div id="product-grid" class="product-grid"></div>
+                    <div id="empty-results" class="empty-results" hidden>
+                        <span data-icon="gift"></span>
+                        <h3>Chưa tìm thấy món quà vừa ý</h3>
+                        <p>Danh mục mẫu còn nhỏ. Bạn có thể mở rộng ngân sách hoặc bớt một lựa chọn để Gifter có thể gợi ý cho bạn</p>
+                        <button id="clear-filters" type="button" class="button button-outline">Bỏ bộ lọc</button>
+                    </div>
+                    <p class="merchant-note" id="merchant-note">
+                        <span data-icon="external"></span>
+                        Nút mua mở trang tìm kiếm Shopee. Hãy kiểm tra giá và người bán tại điểm đến.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hướng dẫn sử dụng -->
+        <section class="how-section" id="how-it-works">
+            <div class="section-heading">
+                <span class="eyebrow small">Ý TƯỞNG TRAO QUÀ, DỄ DÀNG HƠN MỘT CHÚT</span>
+                <h2 id="how-title">Từ "Chẳng biết chọn gì" đến "Đúng ý rồi!"</h2>
+                <p>Không cần tặng gì. Gifter sẽ cùng bạn suy nghĩ</p>
+            </div>
+            <div class="how-grid">
+                <article>
+                    <span class="step-number">01</span>
+                    <span class="how-icon" data-icon="chat"></span>
+                    <h3>Kể về người ấy với Gifter</h3>
+                    <p>Một vài sở thích, một kỷ niệm nhỏ hay đơn giản là ngân sách bạn có</p>
+                </article>
+                <article>
+                    <span class="step-number">02</span>
+                    <span class="how-icon" data-icon="sparkles"></span>
+                    <h3>Khám phá cùng Gifter</h3>
+                    <p>Nhận những ý tưởng có lý do. Chọn thêm vài chi tiết để tìm món quà đúng ý</p>
+                </article>
+                <article>
+                    <span class="step-number">03</span>
+                    <span class="how-icon" data-icon="gift"></span>
+                    <h3>Tìm quà "đúng ý"</h3>
+                    <p>Chọn món quà bạn thích rồi ghé nơi bán. Một tấm thiệp nữa là trọn vẹn</p>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="site-footer">
+        <a class="brand" href="index.html">
+            <img src="assets/images/logo.svg" width="34" height="34" alt="">
+            <span>Gifter<span class="brand-dot"></span>.</span>
+        </a>
+        <p>Món quà nhỏ - Thấu hiểu lớn</p>
+        <span>Được tạo bằng sự quan tâm<span class="brand-dot"></span></span>
+    </footer>
+
+    <!-- Popup Login/Signup -->
+     <dialog id="auth-dialog" class="modal">
+        <button class="modal-close" type="button" data-close-dialog>
+            <span data-icon="close"></span>
+        </button>
+        <span class="modal-mark"></span>
+        <p class="eyebrow small">CHÀO BẠN, ĐẾN VỚI GIFTER</p>
+        <h2 id="auth-title">Mừng bạn quay lại</h2>
+        <p id="auth-description"> Giao diện tài khoản đang được chuẩn bị. Bạn vẫn có thể tìm quà mà không cần đăng nhập.</p>
+        <form id="auth-form">
+            <div class="field" id="name-field" hidden>
+                <label for="auth-name">Tên của bạn</label>
+                <input type="text" id="auth-name" autocomplete="name" maxlength="60">
+            </div>
+            <div class="field">
+                <label for="auth-email">Email</label>
+                <input type="email" id="auth-email" autocomplete="email" placeholder="ban@example.com" required>
+            </div>
+            <div class="field">
+                <label for="auth-password">Email</label>
+                <input type="password" id="auth-password" minlength="8" autocomplete="current-password" placeholder="Tối thiểu 8 ký tự" required>
+            </div>
+            <p class="auth-notice">Bản Demo: chưa xác thực và không lưu email hoặc mật khẩu.</p>
+            <p id="auth-message" class="auth-message" role="status" hidden></p>
+            <button type="submit" class="button button-primary" id="auth-submit">Xem thử đăng nhập</button>
+        </form>
+        <button type="button" id="auth-switch" class="text-button">Chưa có tài khoản? Đăng ký</button>
+     </dialog>
+
+    <!-- Subscription Popup -->
+    <dialog id="pricing-dialog" class="modal pricing-modal">
+        <button type="button" class="modal-close" data-close-dialog>
+            <span data-icon="close"></span>
+        </button>
+        <span class="modal-mark"></span>
+        <p class="eyebrow small">BẮT ĐẦU BẰNG MỘT CHÚT QUAN TÂM</p>
+        <h2 id="pricing-title">Mức giá</h2>
+        <p>Gifter hiện là bản trải nghiệm, chưa thu phí sử dụng.</p>
+        <div class="price-display">0 đ <span>/ bản trải nghiệm</span></div>
+        <ul class="feature-list">
+            <li><span data-icon="check"></span> Tìm quà bằng Describe hoặc Guide</li>
+            <li><span data-icon="check"></span> Tinh chỉnh ý tưởng theo sở thích</li>
+            <li><span data-icon="check"></span> Khám phá danh mục sản phẩm mẫu</li>
+        </ul>
+        <button type="button" class="button button-primary" data-close-dialog>Bắt đầu
+            <span data-icon="arrow-right"></span>
+        </button>
+    </dialog>
+    <div id="toast" class="toast" hidden></div>
+
+ </body>
+ </html>
