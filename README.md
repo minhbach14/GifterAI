@@ -12,39 +12,38 @@ Dự án học phần **Phát triển ứng dụng**: Website hỗ trợ ngườ
 
 ```text
 GifterAI/
-├── .gitignore                  # Bộ lọc loại trừ file rác (bin/, obj/, .DS_Store, .vs/)
-├── README.md                   # Tài liệu hướng dẫn kiến trúc và quy trình làm việc nhóm
-└── gifter_ai/                  # Thư mục mã nguồn chính của ứng dụng ASP.NET Core MVC
-    ├── Controllers/            # Xử lý điều hướng trang (MVC) và API kết nối AI Agent
-    ├── Models/                 # Các lớp dữ liệu (Entity, DTO, ViewModel)
-    ├── Views/
-    │   ├── Shared/
-    │   │   └── _Layout.cshtml  # Khung giao diện dùng chung (Header, Footer, CSS/JS gốc)
-    │   └── Home/
-    │       └── Index.cshtml    # Giao diện Trang chủ (Khung nhập prompt AI & lưới kết quả)
-    ├── wwwroot/
-    │   ├── assets/images/      # Logo, icon SVG, hình minh họa sản phẩm
-    │   ├── css/                # Các file định dạng giao diện (style.css, ...)
-    │   └── js/                 # Toàn bộ logic xử lý giao diện Front-End
-    ├── appsettings.json        # Cấu hình chung của ứng dụng
-    ├── gifter_ai.csproj        # Tệp cấu hình dự án .NET
-    └── Program.cs              # Điểm khởi chạy và cấu hình Middleware/Routing
+├── .gitignore                  
+├── README.md                   
+├── Controllers/            # Xử lý điều hướng trang (MVC) và API kết nối AI Agent
+├── Models/                 # Các lớp dữ liệu (Entity, DTO, ViewModel)
+├── Views/
+│   ├── Shared/
+│   │   └── _Layout.cshtml  # Khung giao diện dùng chung (Header, Footer, CSS/JS gốc)
+│   └── Home/
+│       └── Index.cshtml    # Giao diện Trang chủ (Khung nhập prompt AI & lưới kết quả)
+├── wwwroot/
+│   ├── assets/images/      # Logo, icon SVG, hình minh họa sản phẩm
+│   ├── css/                # Các file định dạng giao diện (style.css, ...)
+│   └── js/                 # Toàn bộ logic xử lý giao diện Front-End
+├── appsettings.json        # Cấu hình chung của ứng dụng
+├── gifter_ai.csproj        # Tệp cấu hình dự án .NET
+└── Program.cs              # Điểm khởi chạy và cấu hình Middleware/Routing
 ```
 
 ---
 
-## 2. Bản đồ kiến trúc Front-End (Dành cho team UI/UX)
+## 2. Bản đồ kiến trúc Front-End
 
 Để tránh viết trùng code, sai đường dẫn hoặc làm vỡ giao diện của nhau, các thành viên cần nắm rõ vai trò của từng tệp trong `wwwroot/`:
 
 ### A. Danh sách các tệp JavaScript (`wwwroot/js/`)
 | Tên tệp | Vai trò & Chức năng chính | Lưu ý khi chỉnh sửa |
 | :--- | :--- | :--- |
-| `config.js` | Lưu cấu hình trung tâm (`mode: 'demo'` hoặc `'api'`, `apiBase`, `maxResults`) | Không tự ý đổi `mode` khi đang làm giao diện tĩnh |
+| `config.js` | Lưu cấu hình trung tâm (`mode: 'demo'` hoặc `'api'`, `apiBase`, `maxResults`) | Không tự ý đổi `mode` sang 'api' khi chưa triển khai backend |
 | `icons.js` | Thư viện 17 biểu tượng SVG vector dùng chung qua thuộc tính `data-icon="..."` | Không cần sửa trừ khi bổ sung icon mới |
 | `utils.js` | Các hàm tiện ích: định dạng tiền VNĐ (`app.money`), chống XSS (`escapeHTML`), thông báo nổi (`app.toast`) | Tái sử dụng trực tiếp, không viết lại hàm định dạng tiền |
 | `header.js` | Quản lý thanh điều hướng trên cùng, menu mobile và kích hoạt popup Đăng nhập / Chi phí | Chỉ sửa khi thay đổi menu điều hướng toàn trang |
-| `data.js` | Dữ liệu 9 sản phẩm quà tặng mẫu để chạy thử nghiệm giao diện | Sẽ được thay thế bằng dữ liệu thật từ API Back-End |
+| `sample-data.js` | Dữ liệu mẫu 9 sản phẩm quà tặng mẫu để chạy thử nghiệm giao diện | Sẽ được thay thế bằng dữ liệu thật từ API Back-End |
 | `gift-service.js` | Tầng giao tiếp dữ liệu (`app.service.find`, `app.service.refine`) | Cầu nối gọi API xuống Controller ASP.NET Core |
 | `app.js` | Bộ điều khiển giao diện trang chủ (chuyển tab *Describe/Guide*, vẽ bong bóng chat, lọc & sắp xếp quà) | Chỉ chỉnh sửa khi làm tính năng trên trang chủ |
 
@@ -52,10 +51,10 @@ GifterAI/
 Khi tạo trang mới (như Đăng nhập, Đăng ký, Hồ sơ, Lịch sử quà tặng...), hãy tận dụng lại các class có sẵn để giữ đồng bộ giao diện:
 * **Bố cục & Khung:** `.site-header`, `.header-inner`, `.container`, `.view-transition`
 * **Nút bấm (Buttons):**
-  * `.button` — Nút bấm tiêu chuẩn của hệ thống
-  * `.button-primary` — Nút hành động chính (nền màu thương hiệu)
-  * `.button-small` — Nút kích thước nhỏ (dùng trên Header)
-  * `.text-button` — Nút dạng văn bản tối giản (ví dụ: *"Bắt đầu lại"*)
+  * `.button` - Nút bấm tiêu chuẩn của hệ thống
+  * `.button-primary` - Nút hành động chính (nền màu thương hiệu)
+  * `.button-small` - Nút kích thước nhỏ (dùng trên Header)
+  * `.text-button` - Nút dạng văn bản tối giản (ví dụ: *"Bắt đầu lại"*)
 * **Trạng thái động (State Classes):** `.active`, `.is-open`, `.is-visible`, `.is-loading`, `.scrolled`
 
 ### C. Quy tắc bắt buộc khi tạo trang mới (Ví dụ: Trang Login / Register)
@@ -77,13 +76,14 @@ Khi tạo trang mới (như Đăng nhập, Đăng ký, Hồ sơ, Lịch sử qu�
 
 ---
 
-## 4. Hướng dẫn làm việc nhóm (Co-work) trên GitHub cho thành viên mới
+## 4. Hướng dẫn làm việc nhóm trên GitHub
 
-> **QUY TẮC VÀNG:**
+> **QUY TẮC:**
 > * Tuyệt đối **KHÔNG** tải code trực tiếp bằng nút *Upload files* trên trình duyệt web GitHub.
 > * Tuyệt đối **KHÔNG** code và push trực tiếp lên nhánh **`main`**. Mỗi tính năng hoặc trang giao diện mới phải được làm trên một **nhánh riêng (Branch)**.
 
-### Bước 1: Tải dự án về máy (Chỉ thực hiện 1 lần duy nhất)
+### Bước 1: Clone dự án về máy
+(Tải bản clone của dự án về và chỉnh sửa)
 Mở Terminal (hoặc Git Bash) tại thư mục muốn lưu dự án trên máy tính và chạy:
 ```bash
 git clone https://github.com/minhbach14/GifterAI.git
@@ -91,6 +91,7 @@ cd GifterAI
 ```
 
 ### Bước 2: Cập nhật code mới nhất & Tạo nhánh làm việc riêng (Thực hiện trước mỗi lần code)
+(Lưu ý: KHÔNG push lên nhánh main vì sẽ bị đè tệp và rối kiến trúc)
 Trước khi bắt đầu làm một trang hoặc chức năng mới, luôn kéo code mới nhất từ nhánh `main` về rồi tách ra một nhánh riêng đặt tên theo cấu trúc `feature/<ten-chuc-nang>`:
 ```bash
 git checkout main
@@ -104,7 +105,7 @@ git checkout -b feature/login-page
 * Chạy `dotnet run` để kiểm tra giao diện hiển thị tốt trên cả máy tính và điện thoại, không báo lỗi trong Console của trình duyệt (`F12`).
 
 ### Bước 4: Lưu lịch sử (Commit) và Đẩy code lên GitHub (Push)
-Sau khi hoàn thành phần việc của mình, mở Terminal tại thư mục gốc `GifterAI` và chạy 3 lệnh sau:
+Sau khi hoàn thành phần việc của mình, mở Terminal tại thư mục gốc `GifterAI` và chạy 3 lệnh sau để gửi yêu cầu đẩy code lên Github:
 ```bash
 git add .
 git commit -m "feat: hoan thanh giao dien trang Login"
