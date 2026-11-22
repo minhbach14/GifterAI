@@ -1,4 +1,4 @@
-# Gifter AI — Website Tư Vấn & Gợi Ý Quà Tặng Thông Minh
+# Gifter AI - Website Tư Vấn & Gợi Ý Quà Tặng Thông Minh
 
 Dự án học phần **Phát triển ứng dụng**: Website hỗ trợ người dùng tìm kiếm và lựa chọn ý tưởng quà tặng cá nhân hóa theo người nhận, dịp tặng, sở thích và ngân sách, tích hợp AI Agent.
 
