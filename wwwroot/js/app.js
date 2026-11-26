@@ -26,8 +26,8 @@
         friend: 'Mình muốn tặng quà tốt nghiệp cho bạn thân, 22 tuổi, thích viết nhật ký và những món đồ sáng tạo. Ngân sách dưới 300k.'
     };
 
-    let toastAuthMode = 'login';
     /* Backend: Xóa biến này nếu chuyển sang trang riêng /Account/Login và /Account/Register */
+    let toastAuthMode = 'login';
 
     // Switch Describe / Guide composer
     function switchTab(mode, focus = false) {

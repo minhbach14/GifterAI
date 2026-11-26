@@ -5,7 +5,7 @@
     const container = document.getElementById('header-container');
     if (!container) return;
     container.innerHTML = `<header class="site-header" id="site-header"><div class="header-inner">
-      <a href="index.html" class="brand" aria-label="Gói Thương — Trang chủ"><img src="assets/images/logo.svg" alt="" width="42" height="42"><span>gói thương<span class="brand-dot">.</span><small>GIFTS WITH A LITTLE THOUGHT</small></span></a>
+      <a href="index.html" class="brand" aria-label="GIFTER — Trang chủ"><img src="assets/images/logo.svg" alt="" width="42" height="42"><span>Gifter<span class="brand-dot">.</span><small>GIFTS WITH A LITTLE THOUGHT</small></span></a>
         <button type="button" id="menu-toggle"
         class="menu-toggle" aria-controls="header-menu"
         aria-expanded="false" aria-label="Mở menu">${app.icon('menu')}</button>
@@ -24,8 +24,8 @@
     const toggle=document.getElementById('menu-toggle');
     const menu=document.getElementById('header-menu');
     const header=document.getElementById('site-header');
-    function closeMenu(returnFocus=false) { toggle.setAttribute('aria-expanded','false'); menu.classList.remove('is-open'); toggle.setAttribute('aria-label','Mở menu'); toggle.innerHTML=app.icon('menu'); if(returnFocus)toggle.focus(); }
-    toggle.addEventListener('click', () => { const open=toggle.getAttribute('aria-expanded')!=='true'; toggle.setAttribute('aria-expanded', String(open)); toggle.setAttribute('aria-label',open?'Đóng menu':'Mở menu'); menu.classList.toggle('is-open',open); toggle.innerHTML=app.icon(open?'close':'menu'); });
+    function closeMenu(returnFocus=false) { toggle.setAttribute('aria-expanded', 'false'); menu.classList.remove('is-open'); toggle.setAttribute('aria-label', 'Mở menu'); toggle.innerHTML = app.icon('menu'); if (returnFocus) toggle.focus(); }
+    toggle.addEventListener('click', () => { const open = toggle.getAttribute('aria-expanded') !== 'true'; toggle.setAttribute('aria-expanded', String(open)); toggle.setAttribute('aria-label', open ? 'Đóng menu' : 'Mở menu'); menu.classList.toggle('is-open', open); toggle.innerHTML = app.icon(open ? 'close' : 'menu');});
     menu.addEventListener('click', event => { if(event.target.closest('a, button'))closeMenu(); });
     // composedPath survives replacement of the SVG inside the menu button.
     document.addEventListener('click', event => { if(!event.composedPath().includes(header))closeMenu(); });
